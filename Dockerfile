@@ -2,14 +2,14 @@ FROM debian:latest
 MAINTAINER Darren Williams <support@directvoip.co.uk>
 
 # Install Required Dependencies
-RUN apt update \
-    && apt -y install apt-utils apt-transport-https wget lsb-release ca-certificates gnupg \
+RUN apt-get update \
+    && apt-get -y install apt-utils apt-transport-https wget lsb-release ca-certificates gnupg \
     && wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg \
     && sh -c 'echo "deb https://packages.sury.org/php/ jessie main" > /etc/apt/sources.list.d/php.list'
 
-RUN apt update \
-    && apt upgrade -y \
-    && apt install -y --force-yes ca-certificates git vim dbus haveged ssl-cert ghostscript libtiff5-dev libtiff-tools nginx curl supervisor net-tools qrencode \
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --force-yes ca-certificates git vim dbus haveged ssl-cert ghostscript libtiff5-dev libtiff-tools nginx curl supervisor net-tools qrencode \
     php7.1 php7.1-cli php7.1-common php7.1-curl php7.1-fpm php7.1-gd php7.1-imap php7.1-json php7.1-mcrypt php7.1-odbc php7.1-opcache php7.1-pgsql php7.1-readline php7.1-sqlite3 php7.1-xml
 
 RUN git clone https://github.com/fusionpbx/fusionpbx.git /var/www/fusionpbx
@@ -32,10 +32,10 @@ RUN sed 's#post_max_size = .*#post_max_size = 80M#g' -i /etc/php/7.1/fpm/php.ini
 
 RUN echo "deb http://files.freeswitch.org/repo/deb/freeswitch-1.6/ jessie main" > /etc/apt/sources.list.d/freeswitch.list \
     && wget -O - https://files.freeswitch.org/repo/deb/debian/freeswitch_archive_g0.pub | apt-key add - \
-    && apt update \
-    && apt upgrade -y
+    && apt-get update \
+    && apt-get upgrade -y
 
-RUN apt install -y --force-yes memcached haveged libyuv-dev flac gdb ntp freeswitch-meta-all freeswitch-mod-skypopen-dbg freeswitch-mod-sms-dbg freeswitch-mod-sofia-dbg
+RUN apt-get install -y --force-yes memcached haveged libyuv-dev flac gdb ntp freeswitch-meta-all freeswitch-mod-skypopen-dbg freeswitch-mod-sms-dbg freeswitch-mod-sofia-dbg
 
 RUN mkdir -p /usr/share/freeswitch/sounds/music/default \
     && /bin/cp -a /usr/share/freeswitch/sounds/music/*000 /usr/share/freeswitch/sounds/music/default/
@@ -57,8 +57,8 @@ RUN usermod -a -G freeswitch www-data \
     && find /var/log/freeswitch -type d -exec chmod 2770 {} \;
 
 ENV PSQL_PASSWORD="psqlpass"
-RUN apt install -y --force-yes sudo postgresql \
-    && apt clean
+RUN apt-get install -y --force-yes sudo postgresql \
+    && apt-get clean
 
 RUN service postgresql start \
     && sleep 10 \
